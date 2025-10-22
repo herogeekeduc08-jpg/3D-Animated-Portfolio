@@ -1,5 +1,7 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import ComputadorContainer from "./computador/ComputadorContainer"
+import LeaoContainer from "./leao/LeaoContainer"
+import BookContainer from "./livros/BookContainer"
 import Counter from "./Counter"
 import "./services.css"
 import { motion, useInView } from "motion/react"
@@ -57,6 +59,7 @@ const service =[
 ]
 
 const Services = () => {
+  const [currentServiceId, setCurrentServiceId] = useState(1);
   const ref = useRef();
   const isInView = useInView(ref, {margin: "-200px"});
   return (
@@ -77,8 +80,9 @@ const Services = () => {
           {service.map((service) => (
             <motion.div
               variants={listVariants}
-              className="service" 
+              className="service"
               key={service.id}
+              onClick={() => setCurrentServiceId(service.id)}
             >
               <div className="serviceIcon">
                 <img src={service.img} alt="" />
@@ -97,7 +101,13 @@ const Services = () => {
         </div>
       </div>
       <div className="sSection right">
-        <ComputadorContainer/>
+        {currentServiceId === 1 ? (
+          <ComputadorContainer/>
+        ) : currentServiceId === 2 ? (
+          <LeaoContainer/>
+        ) : (
+          <BookContainer/>
+         )}
       </div>
     </div>
   )
