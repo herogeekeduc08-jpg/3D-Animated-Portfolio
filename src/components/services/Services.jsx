@@ -1,6 +1,39 @@
+import { useRef } from "react"
 import ComputadorContainer from "./computador/ComputadorContainer"
 import Counter from "./Counter"
 import "./services.css"
+import { motion, useInView } from "motion/react"
+
+const textVariants={
+  initial: {
+    x: -100,
+    y: -100,
+    opacity: 0,
+  },
+  animate: {
+    x: 0,
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 1,
+    },
+  },
+}
+
+const listVariants={
+  initial: {
+    x: -100,
+    opacity: 0,
+  },
+  animate: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 1,
+      staggerChildren: 0.5
+    },
+  },
+}
 
 const service =[
   {
@@ -24,16 +57,29 @@ const service =[
 ]
 
 const Services = () => {
+  const ref = useRef();
+  const isInView = useInView(ref, {margin: "-200px"});
   return (
-    <div className='services'>
+    <div className='services' ref={ref}>
       <div className="sSection left">
-        <h1
+        <motion.h1
+          variants={textVariants}
+          animate={isInView ? "animate": "initial"}
           className="sTitle"
         >
-          Como posso ajudar?</h1>
-        <div className="serviceList">
+          Como posso ajudar?
+        </motion.h1>
+        <motion.div
+          variants={listVariants}
+          animate={isInView ? "animate": "initial"}
+          className="serviceList"
+        >
           {service.map((service) => (
-            <div className="service" key={service.id}>
+            <motion.div
+              variants={listVariants}
+              className="service" 
+              key={service.id}
+            >
               <div className="serviceIcon">
                 <img src={service.img} alt="" />
               </div>
@@ -42,9 +88,9 @@ const Services = () => {
                 <h3>{service.counter} Projetos</h3>
               </div>
 
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
         <div className="counterList">
           <Counter from={0} to={104} text="Projetos Completos"/>
           <Counter from={0} to={72} text="Clientes Felizes"/>
