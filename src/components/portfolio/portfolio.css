@@ -1,8 +1,12 @@
 .portfolio{
-
+    /*height: 500hv;*/
+    height: 600hv;
+    position: relative;
 }
 
 .pList{
+    position: sticky;
+    top: 0;
     display: flex;
     height: 100vh;
     width: max-content;
@@ -16,6 +20,26 @@
     align-items: center;
     justify-content: center;
     gap: 100px;
+}
+
+.pItem:nth-child(1){
+    background: linear-gradient(to right, #12071f, #210b3a);
+}
+
+.pItem:nth-child(2){
+    background: linear-gradient(to right, #210b3a, #27084a);
+}
+
+.pItem:nth-child(3){
+    background: linear-gradient(to right, #27084a, #220345);
+}
+
+.pItem:nth-child(4){
+    background: linear-gradient(to right, #220345, #2a0159);
+}
+
+.pItem:nth-child(5){
+    background: linear-gradient(to right, #2a0159, #12071f);
 }
 
 .pImg{

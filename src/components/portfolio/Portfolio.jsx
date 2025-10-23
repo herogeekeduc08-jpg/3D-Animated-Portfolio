@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from "react"
 import "./portfolio.css"
+import { motion, useScroll, useTransform } from "motion/react"
 
 const items =[
    {
@@ -38,7 +40,43 @@ const items =[
   },
 ]
 
+const imgVariants = {
+  initial: {
+    x: -500,
+    y: 500,
+    opacity: 0,
+  },
+  animate: {
+    x: 0,
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut"
+    },
+  }
+}
+
+const textVariants = {
+  initial: {
+    x: 500,
+    y: 500,
+    opacity: 0,
+  },
+  animate: {
+    x: 0,
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+      staggerChildren: 0.5,
+    },
+  }
+}
+
 const ListItem = ({item}) => {
+
   return(
     <div className="pItem">
       <div className="pImg">
@@ -57,14 +95,51 @@ const ListItem = ({item}) => {
 }
 
 const Portfolio = () => {
+  const [containerDistance, setContainerDistance] = useState(0)
+
+  const ref = useRef()
+
+  useEffect(()=>{
+    const calculateDistance = () => {
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        setContainerDistance(rect.left);
+      }
+    }
+
+    calculateDistance();
+
+    window.addEventListener("resize", calculateDistance);
+
+    return () => {
+      window.removeEventListener("resize", calculateDistance);
+    }
+  },[])
+  
+  const {scrollYProgress} = useScroll({target:ref})
+
+  const xTranslate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, -window.innerWidth * items.length]
+  )
+
   return (
-    <div className='portfolio'>
-      <div className="pList">
+    <div className="portfolio" ref={ref}>
+      <motion.div className="pList" style={{x:xTranslate}}>
+        <div 
+          className="empty"
+          style={{width: window.innerWidth - containerDistance}}
+        />
         {items.map(item=>(
           <ListItem item={item} key={item.id}/>
-
         ))}
-      </div>
+      </motion.div>
+      <section/>
+      <section/>
+      <section/>
+      <section/>
+      <section/>
     </div>
   )
 }
